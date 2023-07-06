@@ -1,3 +1,5 @@
 env/
 
 .*
+__*
+extvar.py

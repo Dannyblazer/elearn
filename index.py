@@ -1,7 +1,7 @@
 import openai
+from extvar import *
 from llama_index import SimpleDirectoryReader, QuestionAnswerPrompt, StorageContext, load_index_from_storage
 from llama_index.storage.index_store import SimpleIndexStore
-OPENAI_API_KEY='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'
 openai.api_key= OPENAI_API_KEY
 
 storage_context = StorageContext.from_defaults(
