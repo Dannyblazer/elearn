@@ -3,3 +3,6 @@ env/
 .*
 __*
 extvar.py
+
+/elearn/users/migrations/
+/elearn/db*
