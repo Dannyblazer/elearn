@@ -1,18 +1,20 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import Account
-from django.forms import forms
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
 
-class CustomUserCreation(UserCreationForm):
+from .models import Account
+
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(max_length=60)
+    required_css_class = 'bold'
+
     class Meta:
         model = Account
-        fields = ("email",)
+        fields = {"email", "username", "password1", "password2"}
+    
+    field_order = ['email', 'username',]
 
-class CustomUserChangeForm(UserCreationForm):
-    class CustomUserChangeForm(UserChangeForm):
-        class meta:
-            model = Account
-            fields = ("email",)
+    
 
 class AccountAuthenticationForm(forms.ModelForm):
     password = forms.CharField(label='password', widget=forms.PasswordInput)
@@ -28,12 +30,11 @@ class AccountAuthenticationForm(forms.ModelForm):
             if not authenticate(email=email, password=password):
                 raise forms.ValidationError("Invalid login")
 
-
 class AccountUpdateForm(forms.ModelForm):
     
     class Meta:
         model = Account
-        fields = ('email', ) #'username', 'first_name', 'last_name', 'profile_image', 'hide_email'
+        fields = ('email', 'username')
     
     def clean_email(self):
         if self.is_valid():
@@ -52,15 +53,3 @@ class AccountUpdateForm(forms.ModelForm):
             except Account.DoesNotExist:
                 return username
             raise forms.ValidationError("Username {} is already in use.".format(username))
-    
-    def save(self, commit=True):
-        account = super(AccountUpdateForm, self).save(commit=False)
-        # account.username = self.cleaned_data['username']
-        account.email = self.cleaned_data['email']
-        # account.first_name = self.cleaned_data['first_name']
-        # account.last_name = self.cleaned_data['last_name']
-        # account.profile_image = self.cleaned_data['profile_image']
-        # account.hide_email = self.cleaned_data['hide_email']
-        if commit:
-            account.save()
-        return account
