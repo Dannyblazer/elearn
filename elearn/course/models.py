@@ -9,6 +9,7 @@ class Course(models.Model):
     media_file = models.FileField(upload_to='course_media/')
     start_date = models.DateField()
     end_date = models.DateField()
+    review   = models.CharField(max_length=50)
     instructor = models.ForeignKey(User, on_delete=models.CASCADE)
     students = models.ManyToManyField(User, related_name='courses_enrolled', blank=True)
 
