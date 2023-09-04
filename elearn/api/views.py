@@ -18,7 +18,7 @@ class AskView(View):
         
         # Load the index from disk
         openai.api_key = os.getenv('OPENAI_API_KEY')
-        print(openai.api_key)
+        
         index_file_path = os.path.join(settings.BASE_DIR, 'indexed_articles/django_custom_user_model', )
         storage_context = StorageContext.from_defaults(persist_dir=index_file_path)
         index = load_index_from_storage(storage_context)
@@ -32,6 +32,7 @@ class AskView(View):
         QA_PROMPT = QuestionAnswerPrompt(QA_PROMPT_TMPL)
         query_engine = index.as_query_engine(text_qa_template=QA_PROMPT,)
         answer = query_engine.query(query_str)
+        print(answer)
         return JsonResponse({'answer': answer.response})
     def post(self, request, *args, **kwargs):
         # Handle POST requests if needed 

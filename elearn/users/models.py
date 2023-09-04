@@ -73,9 +73,4 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 		Token.objects.create(user=instance)
 	
 
-def upload_location(instance, filename):
-    file_path = 'account/{profile_id}/{filename}'.format(
-        profile_id=str(instance.account), filename=filename
-    )
-    return file_path
 

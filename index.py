@@ -12,23 +12,16 @@ openai.api_key = os.environ.get('OPENAI_API_KEY')
 """ storage_context = StorageContext.from_defaults(persist_dir="./storage")
 # load index
 index = load_index_from_storage(storage_context) """
-SimpleWebPageReader = download_loader("SimpleWebPageReader")
+"""SimpleWebPageReader = download_loader("SimpleWebPageReader")
 loader = SimpleWebPageReader()
 documents = loader.load_data(urls=['https://testdriven.io/blog/django-custom-user-model/'])
 index = VectorStoreIndex.from_documents(documents)
+"""
+print(openai.api_key)
+documents = SimpleDirectoryReader('data').load_data()
+index = VectorStoreIndex.from_documents(documents)
 
-QA_PROMPT_TMPL = (
-    "Hello, I have some context information for you:\n"
-    "---------------------\n"
-    "{context_str}"
-    "\n---------------------\n"
-    "Based on this context, could you please help me understand the answer to this question: {query_str}?\n"
-)
-QA_PROMPT = QuestionAnswerPrompt(QA_PROMPT_TMPL)
-query_engine = index.as_query_engine(text_qa_template=QA_PROMPT,)
-
-query_str = "What are the advantages of using a custom User model in Django?"
-
-
-response = query_engine.query(query_str)
+query_engine = index.as_query_engine()
+response = query_engine.query("What did the author do growing up?")
 print(response)
+
